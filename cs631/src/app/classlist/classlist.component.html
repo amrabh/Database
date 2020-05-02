@@ -1,0 +1,19 @@
+<mat-card>
+  <mat-form-field class="full-width">
+    <mat-label>Term</mat-label>
+    <mat-select>
+      <mat-option value="option">Summer 2020</mat-option>
+      <mat-option value="option">Fall 2020</mat-option>
+      <mat-option value="option">Spring 2021</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-selection-list #courses>
+    <mat-list-option *ngFor="let course of Courses">
+      {{course}}
+    </mat-list-option>
+  </mat-selection-list>
+  
+  <p>
+    Options selected: {{courses.selectedOptions.selected.length}}
+  </p>
+</mat-card>

@@ -14,13 +14,15 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RegistrationComponent } from './registration/registration.component';
 import { ErrorHandler } from '@angular/router/src/router';
+import { ClasslistComponent } from './classlist/classlist.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     GetstudentsComponent,
-    RegistrationComponent
+    RegistrationComponent,
+    ClasslistComponent
   ],
   imports: [
     BrowserModule,

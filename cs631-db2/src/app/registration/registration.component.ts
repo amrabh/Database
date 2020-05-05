@@ -27,10 +27,10 @@ export class RegistrationComponent implements OnInit {
   ccolumnsToDisplay: string[] = this.cdisplayedColumns.slice();
 
   sdisplayedColumns: string[] = ['instructor', 'id', 'maxEnrollment', 'registrationCount'];
-  scolumnsToDisplay: string[] = this.sdisplayedColumns.slice();
+  scolumnsToDisplay: string[] = this.sdisplayedColumns.slice(); 
 
   mycourse: Course[] = [];
-  mysection: Section[] = [];
+  mysection: Section[] = []; 
   instructor: string;
   regresponse: RegResponseModel[] = [];
 
@@ -49,6 +49,8 @@ export class RegistrationComponent implements OnInit {
       semester: [''],
       year: ['']
     });
+    
+    
 
     this.submissionForm = this.fb.group({
       courseIdd: [''],
@@ -101,6 +103,7 @@ export class RegistrationComponent implements OnInit {
     }
     this.loading = false;
   }
+ 
 
   async sectionFormsubmitHandler() {
     this.loading = true;
@@ -108,7 +111,7 @@ export class RegistrationComponent implements OnInit {
 
     try{
       this.scs.indexUsingGET2(formValue.courseId,formValue.semester,formValue.year).subscribe(res => {
-        this.mysection = res;
+        this.mysection = res as object[];
         this.sectionsuccess = true;
         console.log(res);
         this.instructor = (JSON.stringify(res));
@@ -126,7 +129,11 @@ export class RegistrationComponent implements OnInit {
     const subformValue = this.submissionForm.value;
 
     try{
-      this.rcs.registerUsingPOST(subformValue).subscribe(res => {
+      this.rcs.registerUsingPOST({
+        "courseCode": "M601",
+        "sectionNo": 1,
+        "studentId": 10,
+      }).subscribe(res => {
         this.regresponse.push(res);
         this.regsuccess = true;
         console.log(res);

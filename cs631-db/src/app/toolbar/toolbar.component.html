@@ -1,0 +1,11 @@
+<mat-card>
+  <p>Student Info</p>
+  <div class="example-container">
+    <mat-form-field hintLabel="Max 10 characters" appearance="fill">
+      <mat-label>Enter your Student ID</mat-label>
+      <input matInput #input maxlength="10" placeholder="Ex. aa2348">
+      <mat-hint align="end">{{input.value?.length || 0}}/10</mat-hint>
+    </mat-form-field>
+  </div>
+  <button class="btn btn-success" (click)="savestudentinfo()">SigIn</button>
+</mat-card>

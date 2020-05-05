@@ -1,0 +1,11 @@
+export * from './courseController.service';
+import { CourseControllerService } from './courseController.service';
+export * from './departmentController.service';
+import { DepartmentControllerService } from './departmentController.service';
+export * from './registrationController.service';
+import { RegistrationControllerService } from './registrationController.service';
+export * from './sectionController.service';
+import { SectionControllerService } from './sectionController.service';
+export * from './studentController.service';
+import { StudentControllerService } from './studentController.service';
+export const APIS = [CourseControllerService, DepartmentControllerService, RegistrationControllerService, SectionControllerService, StudentControllerService];

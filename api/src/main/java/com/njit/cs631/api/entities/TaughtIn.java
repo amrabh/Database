@@ -14,7 +14,6 @@ import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 public class TaughtIn implements Serializable {
@@ -51,7 +50,7 @@ public class TaughtIn implements Serializable {
 		return id;
 	}
 
-	public void setId(TaughtInId id) {
+	public void setId(final TaughtInId id) {
 		this.id = id;
 	}
 
@@ -59,7 +58,7 @@ public class TaughtIn implements Serializable {
 		return weekday;
 	}
 
-	public void setWeekday(int weekday) {
+	public void setWeekday(final int weekday) {
 		this.weekday = weekday;
 	}
 
@@ -67,15 +66,15 @@ public class TaughtIn implements Serializable {
 		return time;
 	}
 
-	public void setTime(String time) {
+	public void setTime(final String time) {
 		this.time = time;
-	}	
-	
+	}
+
 	public Section getSection() {
 		return section;
 	}
 
-	public void setSection(Section section) {
+	public void setSection(final Section section) {
 		this.section = section;
 	}
 
@@ -83,7 +82,7 @@ public class TaughtIn implements Serializable {
 		return room;
 	}
 
-	public void setRoom(Room room) {
+	public void setRoom(final Room room) {
 		this.room = room;
 	}
 }

@@ -15,7 +15,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -62,7 +61,7 @@ public class Section implements Serializable {
 		return id;
 	}
 
-	public void setId(SectionId id) {
+	public void setId(final SectionId id) {
 		this.id = id;
 	}
 
@@ -70,7 +69,7 @@ public class Section implements Serializable {
 		return year;
 	}
 
-	public void setYear(int year) {
+	public void setYear(final int year) {
 		this.year = year;
 	}
 
@@ -78,7 +77,7 @@ public class Section implements Serializable {
 		return semester;
 	}
 
-	public void setSemester(String semester) {
+	public void setSemester(final String semester) {
 		this.semester = semester;
 	}
 
@@ -86,23 +85,23 @@ public class Section implements Serializable {
 		return maxEnrollment;
 	}
 
-	public void setMaxEnrollment(int maxEnrollment) {
+	public void setMaxEnrollment(final int maxEnrollment) {
 		this.maxEnrollment = maxEnrollment;
 	}
 
-//	public String getInstructorSSN() {
-//		return instructorSSN;
-//	}
-//
-//	public void setInstructorSSN(String instructorSSN) {
-//		this.instructorSSN = instructorSSN;
-//	}
-		
+	// public String getInstructorSSN() {
+	// return instructorSSN;
+	// }
+	//
+	// public void setInstructorSSN(String instructorSSN) {
+	// this.instructorSSN = instructorSSN;
+	// }
+
 	public Course getCourse() {
 		return course;
 	}
 
-	public void setCourse(Course course) {
+	public void setCourse(final Course course) {
 		this.course = course;
 	}
 
@@ -110,28 +109,28 @@ public class Section implements Serializable {
 		return instructor;
 	}
 
-	public void setInstructor(Instructor instructor) {
+	public void setInstructor(final Instructor instructor) {
 		this.instructor = instructor;
 	}
-		
+
 	public Set<TaughtIn> getTaughtIns() {
 		return taughtIns;
 	}
 
-	public void setTaughtIns(Set<TaughtIn> taughtIns) {
+	public void setTaughtIns(final Set<TaughtIn> taughtIns) {
 		this.taughtIns = taughtIns;
 	}
 
 	@JsonProperty
-	public TaughtIn getTaughtIn(){
+	public TaughtIn getTaughtIn() {
 		TaughtIn ti = null;
 		if (taughtIns != null) {
-			for (TaughtIn taughtIn : taughtIns) {
+			for (final TaughtIn taughtIn : taughtIns) {
 				ti = taughtIn;
 				break;
 			}
-		}		
-		
+		}
+
 		return ti;
 	}
 
@@ -139,7 +138,7 @@ public class Section implements Serializable {
 		return registrations;
 	}
 
-	public void setRegistrations(Set<Registration> registrations) {
+	public void setRegistrations(final Set<Registration> registrations) {
 		this.registrations = registrations;
 	}
 	

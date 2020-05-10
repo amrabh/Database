@@ -1,0 +1,111 @@
+<form [formGroup]="idForm" class="form">
+  <mat-toolbar>CS631 UNIVERSITY</mat-toolbar>
+<mat-card>
+  <div *ngIf=!success>
+      <p>WELCOME TO THE CS631 UNIVERSITY!</p>
+      <h4>Please Enter your Student Id</h4>
+      <span>
+        <mat-form-field class="form element">
+          <mat-label value="sid">Student Id</mat-label>
+          <input matInput placeholder="Student Id" formControlName="sid">
+        </mat-form-field>
+      </span>
+      <br>
+      <span>
+        <button mat-raised-button color="primary" (click)="submitHandler()">Submit</button>
+      </span>
+    </div>
+
+<div *ngIf=success>
+    <h2>Hello {{mystudent.firstname}} {{mystudent.lastname}}!</h2>
+    <h4>Please Choose Your Option</h4>
+    <mat-tab-group>
+      <mat-tab label="Register"><br>
+        <h4>Choose</h4>
+          <mat-form-field>
+            <mat-label>Semester</mat-label>
+            <mat-select [(ngModel)]="semesterValue" [ngModelOptions]="{standalone: true}" [(value)]="semester" (ngModelChange)="onSemesterSelection($event)">
+              <mat-option value="Summer">Summer</mat-option>
+              <mat-option value="Fall">Fall</mat-option>
+            </mat-select>
+          </mat-form-field>
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          <mat-form-field>
+            <mat-label>Year</mat-label>
+            <mat-select [(ngModel)]="yearValue" [ngModelOptions]="{standalone: true}" [(value)]="year" (ngModelChange)="onYearSelection($event)">
+              <mat-option value="2020">2020</mat-option>
+              <mat-option value="2021">2021</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <br>
+          <mat-form-field>
+            <mat-label>Department</mat-label>
+            <mat-select [(ngModel)]="departmentValue" [ngModelOptions]="{standalone: true}" name="department" (ngModelChange)="onDeptSelection($event)">
+              <mat-option *ngFor="let department of departments" [(value)]="department.code">
+                {{department.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          <mat-form-field>
+            <mat-label>Course</mat-label>
+            <mat-select [(ngModel)]="courseValue" [ngModelOptions]="{standalone: true}" name="course" (ngModelChange)="onCourseSelection($event)">
+              <mat-option *ngFor="let course of courses" [value]="course.code">
+                {{course.name}} 
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+<div *ngIf=courseSelection>
+          <h4>Available sections</h4>
+          <table mat-table [dataSource]="sections" class="mat-elevation-z8"> 
+          <ng-container [matColumnDef]="column" *ngFor="let column of displayedColumns">
+          <th mat-header-cell *matHeaderCellDef> {{column}} </th>
+          <td mat-cell *matCellDef="let element"> <pre>{{element[column] | json}}</pre> </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+          <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr> 
+          </table>
+          <br>
+          
+          <h4>Choose</h4>
+
+          <br>
+          <mat-form-field>
+            <mat-label>Section</mat-label>
+            <mat-select [(ngModel)]="sectionValue" [ngModelOptions]="{standalone: true}" name="section">
+              <mat-option *ngFor="let section of sections" [value]="section.id.sectionNo" (ngModelChange)="onSectionSelection($event)">
+                {{section.id.sectionNo}} 
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+&nbsp;&nbsp;&nbsp;&nbsp;
+          <mat-form-field>
+            <mat-label>Instructor</mat-label>
+            <mat-select [(ngModel)]="instructorValue" [ngModelOptions]="{standalone: true}" name="instructor">
+              <mat-option *ngFor="let section of sections" [value]="section.instructor.name" (ngModelChange)="onInstructorSelection($event)">
+                {{section.instructor.name}} 
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-card-content>
+          <br><h4>{{mystudent.firstname}} {{mystudent.lastname}} (Student Id: {{mystudent.id}})</h4>
+          <br>You Selected:
+          <br>Semester: <font style="color:red">{{semesterValue}}</font>
+          <br>Year: <font style="color:red">{{yearValue}}</font>
+          <br>Department code: <font style="color:red">{{departmentValue}}</font>
+          <br>Course Id: <font style="color:red">{{courseValue}}</font>
+          <br>Section Id: <font style="color:red">{{sectionValue}}</font>
+          <br>Instructor: <font style="color:red">{{instructorValue}}</font>
+        </mat-card-content>
+          <span>
+            <button mat-raised-button color="warn" (click)="registrationSubmitHandler()" >Register</button>
+          </span>
+        </div>
+      </mat-tab>
+      <mat-tab label="Class List"><br>
+        <app-classlist></app-classlist>
+      </mat-tab>
+    </mat-tab-group>
+    </div>
+  </mat-card>
+</form>

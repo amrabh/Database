@@ -63,7 +63,8 @@
           },
           "configurations": {
             "production": {
-              "browserTarget": "cs631-db2:build:production"
+              "browserTarget": "cs631-db2:build:production",
+              "proxyConfig": "src/proxy.conf.json"
             }
           }
         },

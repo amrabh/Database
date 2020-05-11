@@ -6,3 +6,7 @@ table {
     margin: 16px 8px;
   }
   
+
+  div.progress {
+    display:inline-block;
+  }

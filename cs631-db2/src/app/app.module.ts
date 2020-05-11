@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment';
 import { ApiModule } from './rest/api.module';
 import { BASE_PATH } from './rest/variables';
 import { HttpClientModule } from '@angular/common/http';
-import { MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule, MatFormFieldModule, MatOptionModule, MatSelectModule, MatInputModule, MatCardModule, MatTabsModule, MatTableModule } from '@angular/material';
+import { MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule, MatFormFieldModule, MatOptionModule, MatSelectModule, MatInputModule, MatCardModule, MatTabsModule, MatTableModule, MatProgressSpinnerModule } from '@angular/material';
 import { LayoutModule } from '@angular/cdk/layout';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CompleteregComponent } from './completereg/completereg.component';
@@ -41,7 +41,8 @@ import { ClasslistComponent } from './classlist/classlist.component';
     MatTabsModule,
     ReactiveFormsModule,
     FormsModule,
-    MatTableModule
+    MatTableModule,
+    MatProgressSpinnerModule
   ],
   providers: [{ provide: BASE_PATH, useValue: environment.API_BASE_PATH }],
   bootstrap: [AppComponent]

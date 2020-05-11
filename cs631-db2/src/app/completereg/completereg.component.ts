@@ -11,6 +11,9 @@ import { RegistrationControllerService } from '../rest/api/registrationControlle
 import { RegResponseModel } from '../rest/model/regResponseModel';
 import { DepartmentControllerService } from '../rest/api/departmentController.service';
 import { Department } from '../rest/model/department';
+import { HttpErrorResponse } from '@angular/common/http';
+import { throwError } from 'rxjs';
+
 
 @Component({
   selector: 'app-completereg',
@@ -34,8 +37,8 @@ export class CompleteregComponent implements OnInit {
   errormsg: string;
   departmentCode: number;
   courseCode: string;
-  semester: string;
-  year: number;
+  semester: string = "Fall";
+  selectedYear: string = "2020";
   crscode: number;
   mystring: string;
   instrname: Instructor[] = [];
@@ -53,19 +56,23 @@ export class CompleteregComponent implements OnInit {
   instructor: Instructor[] = [];
   regresponse: RegResponseModel[] = [];
   sectionNo: number;
-
-  displayedColumns: string[] = ['instructor', 'id', 'maxEnrollment', 'registrationCount'];  
+  
+  //displayedColumns: string[] = ['instructor', 'id', 'maxEnrollment', 'registrationCount'];  
+  displayedColumns: string[] = ['register', 'id', 'instructor', 'counts'];
   columnsToDisplay: string[] = this.displayedColumns.slice();
 
+  selectedCourse: Course;
+  processing:number[] = [];
+
   async onDeptSelection(deptValue) {
-    this.departmentCode = deptValue;
-    this.ccs.indexUsingGET(this.departmentCode).subscribe(res => this.courses = res);
-    console.log("Department code: ", this.departmentCode)
+    //this.departmentCode = deptValue;
+    this.ccs.indexUsingGET(this.departmentValue).subscribe(res => this.courses = res);
+    console.log("Department code: ", this.departmentValue)
   }
 
-  async onCourseSelection(courseValue) {
-    this.courseCode = courseValue;
-    this.seccs.indexUsingGET2(this.courseCode,this.semester,this.year).subscribe(res => 
+  async onCourseSelection() {
+    this.courseCode = this.selectedCourse.code;
+    this.seccs.indexUsingGET2(this.courseCode,this.semester, parseInt(this.selectedYear)).subscribe(res => 
       {
         this.sections = res;
         this.courseSelection = true;
@@ -80,8 +87,8 @@ export class CompleteregComponent implements OnInit {
   }
 
   async onYearSelection(yearValue) {
-    this.year = yearValue;
-    console.log("Year: ", this.year)
+    //this.year = yearValue;
+    console.log("Year: ", this.selectedYear);
   }
 
   async onSectionSelection(sectionValue) {
@@ -124,20 +131,36 @@ export class CompleteregComponent implements OnInit {
     this.loading = false;
   }
 
-  async registrationSubmitHandler() { 
+  async registrationSubmitHandler(section, index) { 
     this.loading = true;
-    const subformValue = this.idForm.value;
-  
+//    const subformValue = this.idForm.value;
+
+    let params = {
+      "sectionNo": section.id.sectionNo,
+      "courseCode": this.selectedCourse.code,
+      "studentId": this.mystudent.id
+    };
+
+    this.processing[index] = 1;
 
     try{
-      this.rcs.registerUsingPOST(subformValue).subscribe(res => {
+      this.rcs.registerUsingPOST(params).subscribe(res => {
+        console.log('RESP: ', res); 
         this.regresponse.push(res);
         this.regsuccess = true;
-        console.log(res); 
+
+        this.sections[index].registrationCount = res.count;
+
+        delete this.processing[index];
         console.log('success');
+      },
+      error => {
+        delete this.processing[index];
+        alert(error.error);
       });
     }catch(err){
-      console.error(err)
+      delete this.processing[index];
+      console.error('RESP ERROR: ', err);
     }
     this.loading = false;
   } 

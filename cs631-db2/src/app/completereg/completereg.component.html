@@ -19,12 +19,13 @@
 <div *ngIf=success>
     <h2>Hello {{mystudent.firstname}} {{mystudent.lastname}}!</h2>
     <h4>Please Choose Your Option</h4>
+    
     <mat-tab-group>
       <mat-tab label="Register"><br>
-        <h4>Choose</h4>
+        <h4>Class Registration</h4>
           <mat-form-field>
             <mat-label>Semester</mat-label>
-            <mat-select [(ngModel)]="semesterValue" [ngModelOptions]="{standalone: true}" [(value)]="semester" (ngModelChange)="onSemesterSelection($event)">
+            <mat-select [(ngModel)]="semester" [ngModelOptions]="{standalone: true}" [(value)]="semester" (ngModelChange)="onSemesterSelection($event)">
               <mat-option value="Summer">Summer</mat-option>
               <mat-option value="Fall">Fall</mat-option>
             </mat-select>
@@ -32,7 +33,7 @@
           &nbsp;&nbsp;&nbsp;&nbsp;
           <mat-form-field>
             <mat-label>Year</mat-label>
-            <mat-select [(ngModel)]="yearValue" [ngModelOptions]="{standalone: true}" [(value)]="year" (ngModelChange)="onYearSelection($event)">
+            <mat-select [(ngModel)]="selectedYear" [ngModelOptions]="{standalone: true}" (ngModelChange)="onYearSelection($event)">
               <mat-option value="2020">2020</mat-option>
               <mat-option value="2021">2021</mat-option>
             </mat-select>
@@ -49,57 +50,52 @@
           &nbsp;&nbsp;&nbsp;&nbsp;
           <mat-form-field>
             <mat-label>Course</mat-label>
-            <mat-select [(ngModel)]="courseValue" [ngModelOptions]="{standalone: true}" name="course" (ngModelChange)="onCourseSelection($event)">
-              <mat-option *ngFor="let course of courses" [value]="course.code">
+            <mat-select [(ngModel)]="selectedCourse" [ngModelOptions]="{standalone: true}" name="course" (ngModelChange)="onCourseSelection($event)">
+              <mat-option *ngFor="let course of courses" [value]="course">
                 {{course.name}} 
               </mat-option>
             </mat-select>
           </mat-form-field>
 <div *ngIf=courseSelection>
-          <h4>Available sections</h4>
-          <table mat-table [dataSource]="sections" class="mat-elevation-z8"> 
-          <ng-container [matColumnDef]="column" *ngFor="let column of displayedColumns">
-          <th mat-header-cell *matHeaderCellDef> {{column}} </th>
-          <td mat-cell *matCellDef="let element"> <pre>{{element[column] | json}}</pre> </td>
-          </ng-container>
-          <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-          <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr> 
-          </table>
-          <br>
           
-          <h4>Choose</h4>
+  
+  <h4>Sections for {{selectedCourse.name}}</h4>
+          <table mat-table [dataSource]="sections" class="mat-elevation-z8"> 
 
-          <br>
-          <mat-form-field>
-            <mat-label>Section</mat-label>
-            <mat-select [(ngModel)]="sectionValue" [ngModelOptions]="{standalone: true}" name="section">
-              <mat-option *ngFor="let section of sections" [value]="section.id.sectionNo" (ngModelChange)="onSectionSelection($event)">
-                {{section.id.sectionNo}} 
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-&nbsp;&nbsp;&nbsp;&nbsp;
-          <mat-form-field>
-            <mat-label>Instructor</mat-label>
-            <mat-select [(ngModel)]="instructorValue" [ngModelOptions]="{standalone: true}" name="instructor">
-              <mat-option *ngFor="let section of sections" [value]="section.instructor.name" (ngModelChange)="onInstructorSelection($event)">
-                {{section.instructor.name}} 
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-card-content>
-          <br><h4>{{mystudent.firstname}} {{mystudent.lastname}} (Student Id: {{mystudent.id}})</h4>
-          <br>You Selected:
-          <br>Semester: <font style="color:red">{{semesterValue}}</font>
-          <br>Year: <font style="color:red">{{yearValue}}</font>
-          <br>Department code: <font style="color:red">{{departmentValue}}</font>
-          <br>Course Id: <font style="color:red">{{courseValue}}</font>
-          <br>Section Id: <font style="color:red">{{sectionValue}}</font>
-          <br>Instructor: <font style="color:red">{{instructorValue}}</font>
-        </mat-card-content>
-          <span>
-            <button mat-raised-button color="warn" (click)="registrationSubmitHandler()" >Register</button>
-          </span>
+            <ng-container matColumnDef="register">
+              <th mat-header-cell *matHeaderCellDef>&nbsp;</th>
+              <td mat-cell *matCellDef="let element; let i = index">
+                <button mat-raised-button color="primary" (click)="registrationSubmitHandler(element, i)" >Register</button>
+                <div class="progress">
+                  <mat-progress-spinner *ngIf="processing[i]"
+                    class="example-margin"
+                    color="warn"
+                    mode="indeterminate"
+                    diameter="16">
+                  </mat-progress-spinner>
+                </div>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef>Section No</th>
+              <td mat-cell *matCellDef="let element"> {{element.id.sectionNo}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="instructor">
+              <th mat-header-cell *matHeaderCellDef>Instructor</th>
+              <td mat-cell *matCellDef="let element"> {{element.instructor.name}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="counts">
+              <th mat-header-cell *matHeaderCellDef>Seats (registered/max)</th>
+              <td mat-cell *matCellDef="let element"> {{element.registrationCount}} / {{element.maxEnrollment}} </td>
+            </ng-container>
+        
+            <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+            <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr> 
+          </table>
+          
         </div>
       </mat-tab>
       <mat-tab label="Class List"><br>

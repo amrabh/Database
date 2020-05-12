@@ -1,7 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { StudentControllerService } from '../rest/api/studentController.service';
 import { Student } from '../rest/model/student';
-import { FormBuilder, FormGroup, Validators} from '@angular/forms'
+import { Course } from '../rest/model/course';
+import { CourseControllerService } from '../rest/api/courseController.service';
+import { Section } from '../rest/model/section';
+import { SectionControllerService } from '../rest/api/sectionController.service';
+import { Instructor } from '../rest/model/instructor';
+import { RegistrationControllerService } from '../rest/api/registrationController.service';
+import { RegResponseModel } from '../rest/model/regResponseModel';
+import { DepartmentControllerService } from '../rest/api/departmentController.service';
+import { Department } from '../rest/model/department';
+import { HttpErrorResponse } from '@angular/common/http';
+import { throwError } from 'rxjs';
+import {MatSort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
 
 @Component({
   selector: 'app-classlist',
@@ -9,50 +22,100 @@ import { FormBuilder, FormGroup, Validators} from '@angular/forms'
   styleUrls: ['./classlist.component.css']
 })
 export class ClasslistComponent implements OnInit {
-  classlistForm: FormGroup;
+
+  idForm: FormGroup = this.fb.group({
+    courseValue: [''],
+    sectionValue: [''],
+    sid: ['']
+  });
+
   loading=false;
   success=false;
+  sectionsuccess=false;
+  scd=true;
+  courseSelection=false;
 
+  errormsg: string;
+  departmentCode: number;
+  courseCode: string;
+  semester: string = "Fall";
+  selectedYear: string = "2020";
+  crscode: number;
+  mystring: string;
+  instrname: Instructor[] = [];
+  
   students: Student[] = [];
-  mystudent: Student[] = [];
-
-  displayedColumns: string[] = ['firstname', 'lastname', 'year', 'major', 'email', 'phone', 'highSchool'];
+  mystudent: any;
+  departments: Department[] = [];
+  courses: Course[] = [];
+  course: Course[] = [];
+  departmentValue: any;
+  courseValue: string;
+  sectionValue: any;
+  instructorValue: any;
+  sections: Section[] =[]; 
+  instructor: Instructor[] = [];
+  regresponse: RegResponseModel[] = [];
+  sectionNo: number;
+  time: number;
+  
+  //displayedColumns: string[] = ['instructor', 'id', 'maxEnrollment', 'registrationCount'];  
+  displayedColumns: string[] = ['lastname', 'firstname', 'id', 'major', 'year'];
   columnsToDisplay: string[] = this.displayedColumns.slice();
 
+  selectedCourse: Course;
+  selectedSection: Section;
+  processing:number[] = [];
 
-  constructor(private scs: StudentControllerService,
-    private fb: FormBuilder) { }
-
-  ngOnInit() {
-    this.classlistForm = this.fb.group({
-      course: [''],
-      section: [''],
-    });
+  async onDeptSelection(deptValue) {
+    //this.departmentCode = deptValue;
+    this.ccs.indexUsingGET(this.departmentValue).subscribe(res => this.courses = res);
+    console.log("Department code: ", this.departmentValue)
   }
 
-  get course(){
-    return this.classlistForm.get('course')
+  async onCourseSelection() {
+    this.courseCode = this.selectedCourse.code;
+    this.seccs.indexUsingGET2(this.courseCode,this.semester, parseInt(this.selectedYear)).subscribe(res => 
+      {
+        this.sections = res;
+        this.courseSelection = true;
+        console.log(this.sections);
+      });
+    console.log("Course code: ", this.courseCode);
   }
 
-  get section(){
-    return this.classlistForm.get('section')
+  async onSemesterSelection(semesterValue) {
+    this.semester = semesterValue;
+    console.log("Semester: ", this.semester)
   }
 
-  async submitHandler() {
-    this.loading = true;
-    const formValue = this.classlistForm.value;
+  async onYearSelection(yearValue) {
+    console.log("Year: ", this.selectedYear);
+  }
 
+  async onSectionSelection(sectionValue) {
+    this.sectionNo = sectionValue.id.sectionNo;
     try{
-      this.scs.indexUsingGET3(formValue.course, formValue.section).subscribe(res => {
+      this.scs.indexUsingGET3(this.courseCode, this.sectionNo).subscribe(res => {
         this.mystudent = res;
-        this.success = true;
-        console.log(res)
+        console.log(this.mystudent)
+        this.sectionsuccess = true;
         });
     }catch(err){
-      console.error(err)
+      console.error(err);
+      this.scd=false;
     }
-    this.loading = false;
+    console.log("Section No: ", this.sectionNo)
   }
 
+  constructor(private scs: StudentControllerService,
+    private dcs: DepartmentControllerService,
+    private ccs: CourseControllerService,
+    private seccs: SectionControllerService,
+    private fb: FormBuilder) { 
+      this.dcs.indexUsingGET1().subscribe(res => this.departments = res);
+    }  
 
+  ngOnInit() { 
+  }
 }
